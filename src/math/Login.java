@@ -24,6 +24,7 @@ public class Login extends JFrame{
 	
 	private Button next=null;
 	private JButton close=null;
+	private JButton reg=null;
 	private Button nandu=null;
 	private Label  formula;
 
@@ -71,16 +72,16 @@ public class Login extends JFrame{
 		setBounds();
 		addComps();
 		addListeners();
-		refresh();
 		this.getContentPane().add(new JLabel("Just a test."));
-		this.setUndecorated(true); // 去掉窗口的装饰
-		this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);// 采用指定的窗口装饰风格
+		this.setUndecorated(true); 
+		this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		this.setSize(300, 150);
+		
 	}
 
-	void init()//初始化
+	void init()
 	{
-		fr=new JFrame("数学题库-By彭宇帆&王禧龙");//标题
+		fr=new JFrame("数学题库-By彭宇帆&王禧龙");
 
 
 		next=new Button("下一题");
@@ -99,7 +100,7 @@ public class Login extends JFrame{
 		tongji2=new Label("     做错:  "+(all-r)+"题");
 		jtf1 = new JTextField(10);
 
-        jpf1 = new JPasswordField(10);// 设置布局管理(上面忘记：extends JFrame，这里出错了)
+        jpf1 = new JPasswordField(10);
         this.setLayout(new GridLayout(3, 1));
 
 		zu=new CheckboxGroup();
@@ -115,13 +116,15 @@ public class Login extends JFrame{
 		jl2 = new JLabel(new ImageIcon(getClass().getResource("/math/circle.gif")));
 		b_1=new JButton(new ImageIcon(getClass().getResource("/math/2.png")));
 		close=new JButton(new ImageIcon(getClass().getResource("/math/c.png")));
+		reg=new JButton(new ImageIcon(getClass().getResource("/math/reg.png")));
 	}
-	void addComps()//添加组件，将标签,按钮添加到frame中
+	void addComps()
 	{
 
 		fr.add(next);
 		fr.add(b_1);
 		fr.add(close);
+		fr.add(reg);
 		fr.add(jtf1);
 		fr.add(jpf1);
 		fr.add(nandu);
@@ -159,6 +162,9 @@ public class Login extends JFrame{
 		close.setBounds(980,6,30,30);
 		close.setBorderPainted(false);
 		close.setContentAreaFilled(false);
+		reg.setBounds(797,70,156,156);
+		reg.setBorderPainted(false);
+		reg.setContentAreaFilled(false);
 		fr.setUndecorated(true);
 		b_1.setBounds(408,680,224,58);
 		b_1.setBorderPainted(false);
@@ -185,89 +191,39 @@ public class Login extends JFrame{
 	{
 		next.setBackground(Color.blue);
 	}        
-	void addListeners()//添加事件监听器
+	void addListeners()
 	{
-		close.addActionListener(new ActionListener()//下一题
+		close.addActionListener(new ActionListener()
 
 				{
 					public void actionPerformed(ActionEvent e) {
 						fr.dispose();
 					}
 					});
+		reg.addActionListener(new ActionListener()
+
+				{
+					public void actionPerformed(ActionEvent e) {
+						Jdbcs d = new Jdbcs();
+				        String username = jtf1.getText();
+				        String password = jpf1.getText();
+				        d.insert(username, password);
+					}
+					});
 		fr.addWindowListener(new WindowAdapter()
 		{public void windowClosing(WindowEvent e){
 			int c=st();
 			if(c==JOptionPane.YES_OPTION)
-				System.exit(0);//退出
+				System.exit(0);
 		}
 		});
 
 
-		nandu.addActionListener(new ActionListener()//调整难度
-		{      public void actionPerformed(ActionEvent e){
-
-			if(c_0.getState()) xx=0;
-			if(c_1.getState()) xx=1;
-			if(c_2.getState()) xx=2;
-			cf.tiaozhennandu(xx);
-			refresh();
-		}
-		});
-
-
-		next.addActionListener(new ActionListener()//下一题
-
-		{
-			public void actionPerformed(ActionEvent e) {
-				String rightMessage="恭喜你!答对啦!";
-				String wrongMessage="答错喽~正确答案应该是"+cf.getResult();
-				//判断是否答题
-				int c=-1;
-				if(a_0.getState()) c=0;
-				if(a_1.getState()) c=1;
-				if(a_2.getState()) c=2;
-				if(a_3.getState()) c=3;
-				if(c==-1)
-				{alert("请选择","您还没有选择");
-				}
-				else
-				{if(c==cf.getRight())
-				{
-					alert("正确",rightMessage);
-					r++;
-				}
-				else alert("错误",wrongMessage);
-					all++;
-					refresh();
-					tongji0.setText("     共做:  "+all+"题");
-					tongji1.setText("     做对:  "+r+"题");
-					tongji2.setText("     做错:  "+(all-r)+"题");
-				}
-			}
-		});
 	}
 
 
-	void refresh()
-	{
-		cf.run();//调用run方法给出题目和答案
-		formula.setText((all+1)+".   "+cf.getFormula());
-		b_ans0.setText("A     "+cf.getAnswers(0));
-		b_ans1.setText("B     "+cf.getAnswers(1));
-		b_ans2.setText("C     "+cf.getAnswers(2));
-		b_ans3.setText("D     "+cf.getAnswers(3));
-		zu.setSelectedCheckbox(null);
-		a_0.setState(false);
-		a_1.setState(false);
-		a_2.setState(false);
-		a_3.setState(false);
-		if(xx==0) {d_ans0.setForeground(Color.red);d_ans1.setForeground(Color.black);d_ans2.setForeground(Color.black);}
-		if(xx==1) {d_ans0.setForeground(Color.black);d_ans1.setForeground(Color.red);d_ans2.setForeground(Color.black);}
-		if(xx==2) {d_ans0.setForeground(Color.black);d_ans1.setForeground(Color.black);d_ans2.setForeground(Color.red);}
 
-	}
-
-	void alert(String title,String message)//设计窗口格式
+	void alert(String title,String message)
 	{
 		JOptionPane.showMessageDialog(
 				fr,message,title,
@@ -278,10 +234,10 @@ public class Login extends JFrame{
 	{
 		double s;
 		String hint;
-		if(all>0)//根据相应得分给出相应评价并统计信息
+		if(all>0)
 		{
 			s=(double)r/all*100;
-			s=(double)((int)(s*10+0.5))/10; //保留一位小数
+			s=(double)((int)(s*10+0.5))/10; 
 		}
 		else
 			s=-1;
@@ -305,7 +261,7 @@ public class Login extends JFrame{
 
 	public static void main(String[] args)  
 	{   
-	new Login();//调用Login方法
+	new Login();
 	}  
 }
 

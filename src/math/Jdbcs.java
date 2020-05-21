@@ -64,24 +64,6 @@ public class Jdbcs {
         return judge;
     }
  
-    //删除用户信息
-    public void delete(String username, String password) {
-        if (compare(username, password)) {
-            JOptionPane.showMessageDialog(null, "已经完成删除");
-        } else {
-            return;
-        }
-        String sql = "delete from user where username=\"" + username + "\"";
-        try {
-            int a = statement.executeUpdate(sql);
-            con.close();
-            statement.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "不存在该用户！");
-            e.printStackTrace();
-        }
- 
-    }
  
     //用户注册功能的实现，添加数据
     public void insert(String username, String password) {

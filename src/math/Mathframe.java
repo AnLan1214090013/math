@@ -126,9 +126,6 @@ public class Mathframe {
 		fr.add(b_ans1);
 		fr.add(b_ans2);
 		fr.add(b_ans3);
-		fr.add(c_0);
-		fr.add(c_1);
-		fr.add(c_2);
 		fr.add(d_ans0);
 		fr.add(d_ans1);
 		fr.add(d_ans2);
